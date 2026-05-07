@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Reading Tracker Pro+++</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --primary:#6c63ff;
+  --secondary:#8b5cf6;
+  --text:#111827;
+  --soft:#6b7280;
+  --border:rgba(255,255,255,0.7);
+  --shadow:0 10px 30px rgba(15,23,42,0.08);
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(180deg,#eef2ff,#f8fafc);
+  color:var(--text);
+  min-height:100vh;
+  padding:16px;
+  padding-bottom:120px;
+}
+
+.page{
+  display:none;
+  animation:fade .35s ease;
+}
+
+.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(18px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.container{
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(18px);
+  border:1px solid var(--border);
+  border-radius:34px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.app-title{
+  font-size:30px;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+  color:var(--soft);
+  margin-top:6px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.profile-btn{
+  width:54px;
+  height:54px;
+  border-radius:18px;
+  border:none;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:white;
+  font-size:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 10px 25px rgba(99,102,241,0.3);
+}
+
+.hero{
+  overflow:hidden;
+  border-radius:30px;
+  padding:28px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
+}
+
+.hero h2{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.hero p{
+  line-height:1.7;
+  opacity:.95;
+}
+
+.hero button{
+  margin-top:18px;
+  width:auto;
+  padding:14px 22px;
+  background:white;
+  color:#4f46e5;
+  font-weight:700;
+}
+
+.stats{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.stat-card{
+  background:white;
+  border-radius:24px;
+  padding:18px;
+  box-shadow:0 8px 20px rgba(15,23,42,0.05);
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stat-icon{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:#eef2ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+
+.stat-card h4{
+  color:var(--soft);
+  font-size:14px;
+}
+
+.stat-card h3{
+  margin-top:12px;
+  font-size:28px;
+}
+
+.section-title{
+  margin-top:28px;
+  margin-bottom:16px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.input-box{
+  margin-top:16px;
+}
+
+input,
+select{
+  width:100%;
+  border:none;
+  outline:none;
+  background:white;
+  border-radius:22px;
+  padding:18px;
+  font-size:15px;
+  box-shadow:0 6px 18px rgba(15,23,42,0.04);
+}
+
+button{
+  border:none;
+  outline:none;
+  border-radius:22px;
+  padding:16px;
+  width:100%;
+  margin-top:14px;
+  font-size:15px;
+  font-weight:700;
+  color:white;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  box-shadow:0 12px 25px rgba(99,102,241,0.25);
+}
+
+.result{
+  margin-top:16px;
+  background:white;
+  border-radius:24px;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.book-cover{
+  min-width:58px;
+  height:78px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:26px;
+}
+
+iframe{
+  width:100%;
+  height:72vh;
+  border:none;
+  border-radius:28px;
+  margin-top:20px;
+  background:black;
+  overflow:hidden;
+  box-shadow:0 14px 35px rgba(15,23,42,0.16);
+}
+
+#bookSource{
+  margin-top:18px;
+  background:white;
+  border-radius:24px;
+  padding:18px;
+}
+
+.bookmark{
+  margin-top:14px;
+  background:white;
+  border-radius:24px;
+  padding:18px;
+}
+
+.bookmark-title{
+  font-weight:700;
+  margin-bottom:14px;
+  display:block;
+}
+
+.nav{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  width:94%;
+  padding:14px;
+  border-radius:34px;
+  background:rgba(255,255,255,0.8);
+  backdrop-filter:blur(22px);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:999;
+}
+
+.nav button{
+  width:62px;
+  height:62px;
+  margin:0;
+  border-radius:22px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+}
+
+.menu-wrapper{
+  position:relative;
+}
+
+.action-menu{
+  display:none;
+  margin-top:12px;
+  background:white;
+  border-radius:24px;
+  padding:12px;
+  box-shadow:0 12px 30px rgba(15,23,42,0.08);
+}
+
+.action-menu button{
+  margin-top:10px;
+}
+
+.recommend-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:10px;
+}
+
+.recommend-card{
+  background:white;
+  border-radius:26px;
+  padding:18px;
+  box-shadow:0 8px 20px rgba(15,23,42,0.05);
+}
+
+.recommend-cover{
+  width:60px;
+  height:80px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:28px;
+  margin-bottom:14px;
+}
+
+.recommend-card h3{
+  font-size:15px;
+}
+
+.recommend-card p{
+  margin-top:6px;
+  color:var(--soft);
+  font-size:13px;
+}
+
+.home-bookmark-list{
+  display:none;
+  margin-top:16px;
+  border-top:1px solid rgba(148,163,184,0.2);
+  padding-top:14px;
+}
+
+.home-bookmark-item{
+  background:#f8fafc;
+  border-radius:16px;
+  padding:12px;
+  margin-top:10px;
+  font-size:14px;
+  font-weight:600;
+  color:#374151;
+}
+
+.divider{
+  margin:24px 0;
+  border:none;
+  height:1px;
+  background:rgba(148,163,184,0.2);
+}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="container">
+
+    <div class="header">
+      <div>
+        <h1 class="app-title">Reading Tracker</h1>
+        <p class="subtitle">
+          Nikmati pengalaman membaca modern ✨
+        </p>
+      </div>
+
+      <button class="profile-btn" onclick="showPage('account')">
+        👤
+      </button>
+    </div>
+
+    <div class="hero">
+      <h2>Baca buku online lebih nyaman 📚</h2>
+
+      <p>
+        Cari buku favoritmu dan nikmati tampilan profesional.
+      </p>
+
+      <button onclick="showPage('online')">
+        🚀 Mulai Membaca
+      </button>
+    </div>
+
+    <div class="stats">
+
+      <!-- BOOKMARK -->
+      <div class="stat-card" onclick="toggleHomeBookmarks()">
+
+        <div class="stat-top">
+          <h4>Total Bookmark</h4>
+          <div class="stat-icon">⭐</div>
+        </div>
+
+        <h3 id="bookmarkCount">0</h3>
+
+        <div id="homeBookmarkList" class="home-bookmark-list">
+        </div>
+
+      </div>
+
+      <!-- STATUS -->
+      <div class="stat-card">
+        <div class="stat-top">
+          <h4>Status</h4>
+          <div class="stat-icon">📖</div>
+        </div>
+
+        <h3>Online</h3>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ONLINE -->
+<div id="online" class="page">
+  <div class="container">
+
+    <div class="header">
+      <div>
+        <h1 class="app-title">Buku Online</h1>
+        <p class="subtitle">
+          Temukan buku favoritmu 🔍
+        </p>
+      </div>
+    </div>
+
+    <div class="input-box">
+      <input id="searchInput" placeholder="Cari buku online..." oninput="searchBooks()">
+    </div>
+
+    <div id="loading" style="display:none;text-align:center;margin-top:16px">
+      ⏳ Sedang mencari buku...
+    </div>
+
+    <div id="searchResults"></div>
+
+    <!-- REKOMENDASI -->
+    <h2 class="section-title">🔥 Rekomendasi Buku</h2>
+
+    <div class="recommend-grid">
+
+      <div class="recommend-card"
+      onclick="openBook(
+      'https://archive.org/embed/alicesadventuresinwonderland',
+      'Alice in Wonderland',
+      'Archive.org')">
+
+        <div class="recommend-cover">📘</div>
+
+        <h3>Alice in Wonderland</h3>
+
+        <p>Fantasy • Adventure</p>
+      </div>
+
+      <div class="recommend-card"
+      onclick="openBook(
+      'https://archive.org/embed/prideprejudice00aust_1',
+      'Pride and Prejudice',
+      'Archive.org')">
+
+        <div class="recommend-cover">💕</div>
+
+        <h3>Pride and Prejudice</h3>
+
+        <p>Romance • Classic</p>
+      </div>
+
+      <div class="recommend-card"
+      onclick="openBook(
+      'https://archive.org/embed/thewonderfulwizofoz',
+      'Wizard of Oz',
+      'Archive.org')">
+
+        <div class="recommend-cover">🪄</div>
+
+        <h3>Wizard of Oz</h3>
+
+        <p>Fantasy • Adventure</p>
+      </div>
+
+      <div class="recommend-card"
+      onclick="openBook(
+      'https://archive.org/embed/peterpan00barruoft',
+      'Peter Pan',
+      'Archive.org')">
+
+        <div class="recommend-cover">✨</div>
+
+        <h3>Peter Pan</h3>
+
+        <p>Fantasy • Family</p>
+      </div>
+
+    </div>
+
+    <!-- OPSI -->
+    <div class="menu-wrapper">
+
+      <button onclick="toggleActionMenu()">
+        ⭐ Opsi Buku
+      </button>
+
+      <div id="actionMenu" class="action-menu">
+
+        <button onclick="addBookmarkMenu()">
+          ⭐ Tambah Bookmark
+        </button>
+
+        <button onclick="openExternalMenu()">
+          🌐 Buka di Browser
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- BUKU -->
+    <iframe id="bookFrame"></iframe>
+
+    <!-- SUMBER -->
+    <div id="bookSource">
+      <b>🌍 Sumber Buku</b>
+
+      <p id="sourceText" style="margin-top:8px">-</p>
+
+      <a id="sourceLink" href="#" target="_blank">
+        <button>🔗 Kunjungi Sumber</button>
+      </a>
+    </div>
+
+    <!-- BOOKMARK -->
+    <h2 class="section-title">📌 Bookmark Saya</h2>
+
+    <div id="bookmarkList"></div>
+
+  </div>
+</div>
+
+<!-- ACCOUNT -->
+<div id="account" class="page">
+  <div class="container">
+
+    <div class="header">
+      <div>
+        <h1 class="app-title">Akun Saya</h1>
+        <p class="subtitle">
+          Kelola akun dan backup data ✨
+        </p>
+      </div>
+    </div>
+
+    <div id="loginBox">
+      <input id="username" placeholder="Masukkan username">
+
+      <button onclick="login()">🔐 Login</button>
+    </div>
+
+    <div id="userBox" style="display:none">
+
+      <div class="hero" style="margin-top:8px">
+        <h2>Selamat datang 👋</h2>
+
+        <p>
+          Login sebagai <b id="userDisplay"></b>
+        </p>
+      </div>
+
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+
+    <hr class="divider">
+
+    <h2 class="section-title">💾 Backup & Restore</h2>
+
+    <button onclick="downloadData()">
+      ⬇️ Download Data
+    </button>
+
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button onclick="showPage('home')">🏠</button>
+  <button onclick="showPage('online')">📚</button>
+  <button onclick="showPage('account')">👤</button>
+</div>
+
+<script>
+
+let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+let currentBookURL = '';
+let currentBookTitle = '';
+let searchTimeout;
+
+function updateStats(){
+  document.getElementById('bookmarkCount').innerText = bookmarks.length;
+}
+
+function showPage(page){
+
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.remove('active');
+  });
+
+  document.getElementById(page).classList.add('active');
+}
+
+function login(){
+
+  const user=document.getElementById('username').value;
+
+  if(!user){
+    alert('Isi username');
+    return;
+  }
+
+  localStorage.setItem('user',user);
+
+  checkLogin();
+}
+
+function logout(){
+
+  localStorage.removeItem('user');
+
+  checkLogin();
+}
+
+function checkLogin(){
+
+  const user=localStorage.getItem('user');
+
+  if(user){
+
+    document.getElementById('loginBox').style.display='none';
+    document.getElementById('userBox').style.display='block';
+
+    document.getElementById('userDisplay').innerText=user;
+
+  }else{
+
+    document.getElementById('loginBox').style.display='block';
+    document.getElementById('userBox').style.display='none';
+  }
+}
+
+function downloadData(){
+
+  const data={
+    bookmarks,
+    user:localStorage.getItem('user')
+  };
+
+  const blob=new Blob([
+    JSON.stringify(data,null,2)
+  ],{
+    type:'application/json'
+  });
+
+  const a=document.createElement('a');
+
+  a.href=URL.createObjectURL(blob);
+  a.download='reading-data.json';
+
+  a.click();
+}
+
+function searchBooks(){
+
+  clearTimeout(searchTimeout);
+
+  searchTimeout=setTimeout(async ()=>{
+
+    const q=document.getElementById('searchInput').value;
+
+    if(!q)return;
+
+    const loading=document.getElementById('loading');
+    const results=document.getElementById('searchResults');
+
+    loading.style.display='block';
+
+    results.innerHTML='';
+
+    try{
+
+      const res=await fetch(`https://openlibrary.org/search.json?q=${q}&limit=6`);
+
+      const data=await res.json();
+
+      loading.style.display='none';
+
+      data.docs.forEach(b=>{
+
+        if(!b.ia)return;
+
+        const d=document.createElement('div');
+
+        d.className='result';
+
+        d.innerHTML=`
+          <div class="book-cover">📖</div>
+
+          <div>
+            <h3>${b.title}</h3>
+            <p>${b.author_name?.[0] || 'Unknown Author'}</p>
+          </div>
+        `;
+
+        d.onclick=()=>{
+
+          const url=`https://archive.org/embed/${b.ia[0]}`;
+
+          openBook(
+            url,
+            b.title,
+            'OpenLibrary & Archive.org'
+          );
+        };
+
+        results.appendChild(d);
+      });
+
+    }catch{
+
+      loading.style.display='none';
+
+      results.innerHTML='⚠️ Error mencari buku';
+    }
+
+  },300);
+}
+
+function openBook(url,title='Buku',source='Archive.org'){
+
+  currentBookURL=url;
+  currentBookTitle=title;
+
+  document.getElementById('bookFrame').src=url;
+
+  document.getElementById('sourceText').innerText=source;
+
+  document.getElementById('sourceLink').href=url;
+}
+
+function toggleActionMenu(){
+
+  const menu=document.getElementById('actionMenu');
+
+  if(menu.style.display==='block'){
+    menu.style.display='none';
+  }else{
+    menu.style.display='block';
+  }
+}
+
+function addBookmarkMenu(){
+
+  if(!currentBookURL){
+    alert('Buka buku dulu');
+    return;
+  }
+
+  if(bookmarks.find(b=>b.url===currentBookURL)){
+    alert('Bookmark sudah ada');
+    return;
+  }
+
+  bookmarks.push({
+    title:currentBookTitle,
+    url:currentBookURL
+  });
+
+  localStorage.setItem(
+    'bookmarks',
+    JSON.stringify(bookmarks)
+  );
+
+  renderBookmarks();
+  renderHomeBookmarks();
+  updateStats();
+
+  alert('Bookmark berhasil ditambahkan ⭐');
+
+  document.getElementById('actionMenu').style.display='none';
+}
+
+function openExternalMenu(){
+
+  if(!currentBookURL){
+    alert('Buka buku dulu');
+    return;
+  }
+
+  window.open(currentBookURL,'_blank');
+
+  document.getElementById('actionMenu').style.display='none';
+}
+
+function deleteBookmark(i){
+
+  bookmarks.splice(i,1);
+
+  localStorage.setItem(
+    'bookmarks',
+    JSON.stringify(bookmarks)
+  );
+
+  renderBookmarks();
+  renderHomeBookmarks();
+  updateStats();
+}
+
+function renderBookmarks(){
+
+  const el=document.getElementById('bookmarkList');
+
+  el.innerHTML='';
+
+  bookmarks.forEach((b,i)=>{
+
+    el.innerHTML += `
+      <div class="bookmark">
+
+        <span class="bookmark-title"
+        onclick="openBook('${b.url}','${b.title}','Archive.org')">
+          📖 ${b.title}
+        </span>
+
+        <button onclick="deleteBookmark(${i})">
+          ❌ Hapus Bookmark
+        </button>
+
+      </div>
+    `;
+  });
+}
+
+function toggleHomeBookmarks(){
+
+  const box=document.getElementById('homeBookmarkList');
+
+  if(box.style.display==='block'){
+
+    box.style.display='none';
+
+  }else{
+
+    renderHomeBookmarks();
+
+    box.style.display='block';
+  }
+}
+
+function renderHomeBookmarks(){
+
+  const box=document.getElementById('homeBookmarkList');
+
+  box.innerHTML='';
+
+  if(bookmarks.length===0){
+
+    box.innerHTML=`
+      <div class="home-bookmark-item">
+        Belum ada bookmark 📚
+      </div>
+    `;
+
+    return;
+  }
+
+  bookmarks.forEach((b)=>{
+
+    box.innerHTML += `
+      <div class="home-bookmark-item"
+      onclick="openBook('${b.url}','${b.title}','Archive.org');showPage('online')">
+
+        📖 ${b.title}
+
+      </div>
+    `;
+  });
+}
+
+renderBookmarks();
+renderHomeBookmarks();
+checkLogin();
+updateStats();
+
+</script>
+
+</body>
+</html>
