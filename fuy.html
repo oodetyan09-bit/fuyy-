@@ -261,11 +261,11 @@ iframe{
 .nav{
   position:fixed;
   left:50%;
-  bottom:18px;
+  bottom:12px;
   transform:translateX(-50%);
-  width:94%;
-  padding:14px;
-  border-radius:34px;
+  width:88%;
+  padding:10px;
+  border-radius:24px;
   background:rgba(255,255,255,0.8);
   backdrop-filter:blur(22px);
   display:flex;
@@ -275,15 +275,15 @@ iframe{
 }
 
 .nav button{
-  width:62px;
-  height:62px;
+  width:48px;
+  height:48px;
   margin:0;
-  border-radius:22px;
+  border-radius:16px;
   padding:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
+  font-size:20px;
 }
 
 .menu-wrapper{
@@ -398,7 +398,6 @@ iframe{
 
     <div class="stats">
 
-      <!-- BOOKMARK -->
       <div class="stat-card" onclick="toggleHomeBookmarks()">
 
         <div class="stat-top">
@@ -413,7 +412,6 @@ iframe{
 
       </div>
 
-      <!-- STATUS -->
       <div class="stat-card">
         <div class="stat-top">
           <h4>Status</h4>
@@ -456,56 +454,32 @@ iframe{
 
     <div class="recommend-grid">
 
+      <!-- Frankenstein -->
       <div class="recommend-card"
       onclick="openBook(
-      'https://archive.org/embed/alicesadventuresinwonderland',
-      'Alice in Wonderland',
-      'Archive.org')">
+      'https://archive.org/embed/frankensteinmoder00shelrich',
+      'Frankenstein or The Modern Prometheus',
+      'Karya Mary Shelley • Archive.org')">
 
-        <div class="recommend-cover">📘</div>
+        <div class="recommend-cover">⚡</div>
 
-        <h3>Alice in Wonderland</h3>
+        <h3>Frankenstein or The Modern Prometheus</h3>
 
-        <p>Fantasy • Adventure</p>
+        <p>Mary Shelley • Gothic Fiction</p>
       </div>
 
+      <!-- Wuthering Heights -->
       <div class="recommend-card"
       onclick="openBook(
-      'https://archive.org/embed/prideprejudice00aust_1',
-      'Pride and Prejudice',
-      'Archive.org')">
+      'https://archive.org/embed/wutheringheights00bron_0',
+      'Wuthering Heights',
+      'Karya Emily Brontë • Archive.org')">
 
-        <div class="recommend-cover">💕</div>
+        <div class="recommend-cover">🌫️</div>
 
-        <h3>Pride and Prejudice</h3>
+        <h3>Wuthering Heights</h3>
 
-        <p>Romance • Classic</p>
-      </div>
-
-      <div class="recommend-card"
-      onclick="openBook(
-      'https://archive.org/embed/thewonderfulwizofoz',
-      'Wizard of Oz',
-      'Archive.org')">
-
-        <div class="recommend-cover">🪄</div>
-
-        <h3>Wizard of Oz</h3>
-
-        <p>Fantasy • Adventure</p>
-      </div>
-
-      <div class="recommend-card"
-      onclick="openBook(
-      'https://archive.org/embed/peterpan00barruoft',
-      'Peter Pan',
-      'Archive.org')">
-
-        <div class="recommend-cover">✨</div>
-
-        <h3>Peter Pan</h3>
-
-        <p>Fantasy • Family</p>
+        <p>Emily Brontë • Romance</p>
       </div>
 
     </div>
@@ -683,70 +657,133 @@ function downloadData(){
   a.click();
 }
 
-function searchBooks(){
+async function searchBooks(){
 
-  clearTimeout(searchTimeout);
+clearTimeout(searchTimeout);
 
-  searchTimeout=setTimeout(async ()=>{
+searchTimeout=setTimeout(async()=>{
 
-    const q=document.getElementById('searchInput').value;
+const q=document.getElementById('searchInput')
+.value.trim();
 
-    if(!q)return;
+const loading=document.getElementById('loading');
+const results=document.getElementById('searchResults');
 
-    const loading=document.getElementById('loading');
-    const results=document.getElementById('searchResults');
+results.innerHTML='';
 
-    loading.style.display='block';
+if(q.length<1){
+loading.style.display='none';
+return;
+}
 
-    results.innerHTML='';
+loading.style.display='block';
 
-    try{
+try{
 
-      const res=await fetch(`https://openlibrary.org/search.json?q=${q}&limit=6`);
+const res=await fetch(
+`https://openlibrary.org/search.json?title=${encodeURIComponent(q)}&limit=12`
+);
 
-      const data=await res.json();
+const data=await res.json();
 
-      loading.style.display='none';
+loading.style.display='none';
 
-      data.docs.forEach(b=>{
+results.innerHTML='';
 
-        if(!b.ia)return;
+const books=data.docs
+.filter(b=>b.ia && b.title)
+.sort((a,b)=>{
 
-        const d=document.createElement('div');
+const aTitle=a.title.toLowerCase();
+const bTitle=b.title.toLowerCase();
+const search=q.toLowerCase();
 
-        d.className='result';
+const aStarts=aTitle.startsWith(search);
+const bStarts=bTitle.startsWith(search);
 
-        d.innerHTML=`
-          <div class="book-cover">📖</div>
+if(aStarts && !bStarts) return -1;
+if(!aStarts && bStarts) return 1;
 
-          <div>
-            <h3>${b.title}</h3>
-            <p>${b.author_name?.[0] || 'Unknown Author'}</p>
-          </div>
-        `;
+return aTitle.localeCompare(bTitle);
 
-        d.onclick=()=>{
+});
 
-          const url=`https://archive.org/embed/${b.ia[0]}`;
+if(books.length===0){
 
-          openBook(
-            url,
-            b.title,
-            'OpenLibrary & Archive.org'
-          );
-        };
+results.innerHTML=`
+<div class="result">
+<div class="book-cover">😢</div>
+<div>
+<h3>Buku tidak ditemukan</h3>
+<p>Coba kata lain</p>
+</div>
+</div>
+`;
 
-        results.appendChild(d);
-      });
+return;
+}
 
-    }catch{
+books.forEach(b=>{
 
-      loading.style.display='none';
+const d=document.createElement('div');
 
-      results.innerHTML='⚠️ Error mencari buku';
-    }
+d.className='result';
 
-  },300);
+d.innerHTML=`
+<div class="book-cover">📖</div>
+
+<div>
+<h3>${b.title}</h3>
+<p>${b.author_name?.[0]||'Unknown Author'}</p>
+</div>
+`;
+
+d.onclick=()=>{
+
+const url=`https://archive.org/embed/${b.ia[0]}`;
+
+openBook(
+url,
+b.title,
+'OpenLibrary & Archive.org'
+);
+
+// sembunyikan hasil search
+document.getElementById('searchResults').innerHTML='';
+
+// kosongkan kotak search
+document.getElementById('searchInput').value='';
+
+// pindah otomatis ke buku
+document.getElementById('bookFrame')
+.scrollIntoView({
+behavior:'smooth'
+});
+
+};
+
+results.appendChild(d);
+
+});
+
+}catch{
+
+loading.style.display='none';
+
+results.innerHTML=`
+<div class="result">
+<div class="book-cover">⚠️</div>
+<div>
+<h3>Error</h3>
+<p>Gagal mencari buku</p>
+</div>
+</div>
+`;
+
+}
+
+},100);
+
 }
 
 function openBook(url,title='Buku',source='Archive.org'){
